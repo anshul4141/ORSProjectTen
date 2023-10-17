@@ -16,7 +16,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 /**
  * Base class extended by all DTOs.
- * @author Anshul Prajapati
+ * @author Divya Paliwal
  */
 @MappedSuperclass
 public abstract class BaseDTO implements Serializable, DropdownList, Comparable<BaseDTO> {
@@ -58,6 +58,12 @@ public abstract class BaseDTO implements Serializable, DropdownList, Comparable<
 	@Column(name = "ORG_NAME", length = 50)
 	private String orgName;
 
+	public abstract String getUniqueKey();
+	
+	public abstract String getUniqueValue();
+	
+	public abstract String getLabel();
+	
 	/**
 	 * accessor
 	 */
@@ -125,11 +131,6 @@ public abstract class BaseDTO implements Serializable, DropdownList, Comparable<
 		return String.valueOf(id);
 	}
 
-	public String getUniqueKey(){
-		return null;
-	}
-
-	
 	/**
 	 * Order by attributes
 	 * 

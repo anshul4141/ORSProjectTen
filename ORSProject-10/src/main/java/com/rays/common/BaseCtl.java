@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.rays.common.attachment.AttachmentServiceImpl;
+import com.rays.common.attachment.AttachmentServiceInt;
 import com.rays.dto.MarksheetDTO;
 import com.rays.dto.UserDTO;
 
@@ -47,6 +49,9 @@ public abstract class BaseCtl<F extends BaseForm, T extends BaseDTO, S extends B
 
 	@Autowired
 	protected S baseService;
+
+	@Autowired
+	AttachmentServiceInt attachmentService;
 
 	@Value("${page.size}")
 	private int pageSize = 0;
@@ -143,7 +148,13 @@ public abstract class BaseCtl<F extends BaseForm, T extends BaseDTO, S extends B
 			// System.out.println("deleteMany Page No is ******---" + pageNo);
 
 			for (String id : ids) {
+
 				System.out.println("Records To be Deleted :: " + id);
+
+				UserDTO dto = (UserDTO) baseService.findById(Long.parseLong(id), userContext);
+
+				attachmentService.delete(dto.getImageId(), userContext);
+
 				baseService.delete(Long.parseLong(id), userContext);
 
 			}
@@ -240,7 +251,19 @@ public abstract class BaseCtl<F extends BaseForm, T extends BaseDTO, S extends B
 			T dto = (T) form.getDto();
 			System.out.println("----------->" + dto);
 			if (dto.getId() != null && dto.getId() > 0) {
+
+				T existDto1 = (T) baseService.findByUniqueKey("loginId", dto.getUniqueValue(), userContext);
+				System.out.println("exitDto>>>>>>>>>>>>>>>>>>>>>>>>>>> " + existDto1);
+
+				if (existDto1 != null && dto.getId() != existDto1.getId()) {
+					res.addMessage("Login Id already exist");
+					res.setSuccess(false);
+					return res;
+				}
 				baseService.update(dto, userContext);
+				res.addMessage("User Update");
+				res.setSuccess(true);
+				return res;
 			} else {
 				System.out.println("before calling add of baseservice");
 				if (dto.getUniqueKey() != null && !dto.getUniqueKey().equals("")) {

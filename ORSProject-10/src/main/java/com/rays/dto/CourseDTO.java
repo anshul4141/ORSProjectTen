@@ -80,4 +80,22 @@ public class CourseDTO extends BaseDTO {
 		return map;
 	}
 
+	@Override
+	public String getUniqueKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUniqueValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getLabel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
